@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package inventario;
+
+// Servicio de gestión de inventario de donaciones
+service InventarioService {
+  rpc CrearDonacion(CrearDonacionRequest) returns (DonacionResponse);
+  rpc ObtenerDonacion(ObtenerDonacionRequest) returns (DonacionResponse);
+  rpc ListarDonaciones(ListarDonacionesRequest) returns (ListarDonacionesResponse);
+  rpc ActualizarDonacion(ActualizarDonacionRequest) returns (DonacionResponse);
+  rpc EliminarDonacion(EliminarDonacionRequest) returns (EliminarDonacionResponse);
+  rpc ActualizarStock(ActualizarStockRequest) returns (ActualizarStockResponse);
+  rpc ValidarStock(ValidarStockRequest) returns (ValidarStockResponse);
+}
+
+// Mensajes de datos
+message Donacion {
+  int32 id = 1;
+  string categoria = 2; // ROPA, ALIMENTOS, JUGUETES, UTILES_ESCOLARES
+  string descripcion = 3;
+  int32 cantidad = 4;
+  bool eliminado = 5;
+  string fechaHoraAlta = 6;
+  string usuarioAlta = 7;
+  string fechaHoraModificacion = 8;
+  string usuarioModificacion = 9;
+}
+
+// Requests
+message CrearDonacionRequest {
+  string categoria = 1;
+  string descripcion = 2;
+  int32 cantidad = 3;
+  string usuarioCreador = 4;
+}
+
+message ObtenerDonacionRequest {
+  int32 id = 1;
+}
+
+message ListarDonacionesRequest {
+  int32 pagina = 1;
+  int32 tamanoPagina = 2;
+  string categoria = 3; // Filtro opcional por categoría
+  bool incluirEliminados = 4;
+}
+
+message ActualizarDonacionRequest {
+  int32 id = 1;
+  string descripcion = 2;
+  int32 cantidad = 3;
+  string usuarioModificacion = 4;
+}
+
+message EliminarDonacionRequest {
+  int32 id = 1;
+  string usuarioEliminacion = 2;
+}
+
+message ActualizarStockRequest {
+  int32 donacionId = 1;
+  int32 cantidadCambio = 2; // Positivo para sumar, negativo para restar
+  string usuarioModificacion = 3;
+  string motivo = 4; // Motivo del cambio de stock
+}
+
+message ValidarStockRequest {
+  int32 donacionId = 1;
+  int32 cantidadRequerida = 2;
+}
+
+// Responses
+message DonacionResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Donacion donacion = 3;
+}
+
+message ListarDonacionesResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  repeated Donacion donaciones = 3;
+  int32 totalRegistros = 4;
+}
+
+message EliminarDonacionResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+}
+
+message ActualizarStockResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  int32 nuevaCantidad = 3;
+}
+
+message ValidarStockResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  bool tieneStockSuficiente = 3;
+  int32 cantidadDisponible = 4;
+}

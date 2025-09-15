@@ -1,0 +1,8 @@
+grpcio==1.57.0
+grpcio-tools==1.57.0
+protobuf==4.24.0
+mysql-connector-python==8.1.0
+kafka-python==2.0.2
+python-dotenv==1.0.0
+pytest==7.4.0
+pytest-asyncio==0.21.1

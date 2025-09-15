@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package usuario;
+
+// Servicio de gestión de usuarios
+service UsuarioService {
+  rpc CrearUsuario(CrearUsuarioRequest) returns (UsuarioResponse);
+  rpc ObtenerUsuario(ObtenerUsuarioRequest) returns (UsuarioResponse);
+  rpc ListarUsuarios(ListarUsuariosRequest) returns (ListarUsuariosResponse);
+  rpc ActualizarUsuario(ActualizarUsuarioRequest) returns (UsuarioResponse);
+  rpc EliminarUsuario(EliminarUsuarioRequest) returns (EliminarUsuarioResponse);
+  rpc AutenticarUsuario(AutenticarRequest) returns (AutenticarResponse);
+  rpc ValidarToken(ValidarTokenRequest) returns (ValidarTokenResponse);
+  rpc ValidarPermisos(ValidarPermisosRequest) returns (ValidarPermisosResponse);
+}
+
+// Mensajes de datos
+message Usuario {
+  int32 id = 1;
+  string nombreUsuario = 2;
+  string nombre = 3;
+  string apellido = 4;
+  string telefono = 5;
+  string email = 6;
+  string rol = 7; // PRESIDENTE, VOCAL, COORDINADOR, VOLUNTARIO
+  bool activo = 8;
+  string fechaHoraAlta = 9;
+  string usuarioAlta = 10;
+  string fechaHoraModificacion = 11;
+  string usuarioModificacion = 12;
+}
+
+// Requests
+message CrearUsuarioRequest {
+  string nombreUsuario = 1;
+  string nombre = 2;
+  string apellido = 3;
+  string telefono = 4;
+  string email = 5;
+  string rol = 6;
+  string usuarioCreador = 7;
+}
+
+message ObtenerUsuarioRequest {
+  int32 id = 1;
+}
+
+message ListarUsuariosRequest {
+  int32 pagina = 1;
+  int32 tamanoPagina = 2;
+  bool incluirInactivos = 3;
+}
+
+message ActualizarUsuarioRequest {
+  int32 id = 1;
+  string nombreUsuario = 2;
+  string nombre = 3;
+  string apellido = 4;
+  string telefono = 5;
+  string email = 6;
+  string rol = 7;
+  string usuarioModificacion = 8;
+}
+
+message EliminarUsuarioRequest {
+  int32 id = 1;
+  string usuarioEliminacion = 2;
+}
+
+message AutenticarRequest {
+  string identificador = 1; // nombreUsuario o email
+  string clave = 2;
+}
+
+message ValidarTokenRequest {
+  string token = 1;
+}
+
+message ValidarPermisosRequest {
+  string token = 1;
+  string operacion = 2; // usuarios, inventario, eventos, participar_eventos, auto_asignar_eventos, gestionar_participantes
+}
+
+// Responses
+message UsuarioResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Usuario usuario = 3;
+}
+
+message ListarUsuariosResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  repeated Usuario usuarios = 3;
+  int32 totalRegistros = 4;
+}
+
+message EliminarUsuarioResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+}
+
+message AutenticarResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  string token = 3;
+  Usuario usuario = 4;
+}
+
+message ValidarTokenResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Usuario usuario = 3;
+}
+
+message ValidarPermisosResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Usuario usuario = 3;
+}
