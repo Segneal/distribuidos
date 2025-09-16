@@ -1,0 +1,38 @@
+# Integration Test Requirements
+# Install with: pip install -r tests/requirements.txt
+
+# Core testing framework
+pytest>=7.0.0
+pytest-json-report>=1.5.0
+pytest-html>=3.1.0
+
+# HTTP requests
+requests>=2.28.0
+
+# Kafka client
+kafka-python>=2.0.2
+
+# JSON handling and utilities
+jsonschema>=4.0.0
+
+# Concurrent testing
+pytest-xdist>=2.5.0
+
+# Coverage reporting
+pytest-cov>=4.0.0
+
+# Test fixtures and utilities
+pytest-mock>=3.8.0
+pytest-timeout>=2.1.0
+
+# For colored output
+colorama>=0.4.5
+
+# For test data generation
+faker>=15.0.0
+
+# For async testing (if needed)
+pytest-asyncio>=0.20.0
+
+# For performance testing
+pytest-benchmark>=4.0.0

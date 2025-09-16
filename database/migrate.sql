@@ -140,6 +140,59 @@ CREATE TABLE eventos_externos (
     INDEX idx_activo (activo)
 );
 
+-- Table for our own donation requests (for audit purposes)
+CREATE TABLE solicitudes_propias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) UNIQUE NOT NULL,
+    donaciones_json TEXT NOT NULL,
+    usuario_creador VARCHAR(50) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activa BOOLEAN DEFAULT true,
+    fecha_baja TIMESTAMP NULL,
+    usuario_baja VARCHAR(50) NULL,
+    INDEX idx_solicitud (id_solicitud),
+    INDEX idx_usuario_creador (usuario_creador),
+    INDEX idx_activa (activa),
+    INDEX idx_fecha_baja (fecha_baja)
+);
+
+-- Table for our own donation offers (for audit purposes)
+CREATE TABLE ofertas_propias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_oferta VARCHAR(50) UNIQUE NOT NULL,
+    donaciones_json TEXT NOT NULL,
+    usuario_creador VARCHAR(50) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activa BOOLEAN DEFAULT true,
+    INDEX idx_oferta (id_oferta),
+    INDEX idx_usuario_creador (usuario_creador),
+    INDEX idx_activa (activa)
+);
+
+-- Table for tracking sent transfers (for audit purposes)
+CREATE TABLE transferencias_enviadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) NOT NULL,
+    id_organizacion_solicitante VARCHAR(50) NOT NULL,
+    donaciones_json TEXT NOT NULL,
+    usuario_transferencia VARCHAR(50) NOT NULL,
+    fecha_transferencia TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_solicitud (id_solicitud),
+    INDEX idx_organizacion (id_organizacion_solicitante),
+    INDEX idx_usuario (usuario_transferencia)
+);
+
+-- Table for tracking received transfers (for audit purposes)
+CREATE TABLE transferencias_recibidas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) NOT NULL,
+    id_organizacion_donante VARCHAR(50) NOT NULL,
+    donaciones_json TEXT NOT NULL,
+    fecha_recepcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_solicitud (id_solicitud),
+    INDEX idx_organizacion (id_organizacion_donante)
+);
+
 -- Insert default admin user (password: 'admin123')
 -- Note: In production, this should be changed immediately
 INSERT INTO usuarios (nombre_usuario, nombre, apellido, telefono, clave_hash, email, rol, usuario_alta) VALUES

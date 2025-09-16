@@ -122,3 +122,85 @@ CREATE TABLE eventos_externos (
     INDEX idx_fecha_hora (fecha_hora),
     INDEX idx_activo (activo)
 );
+
+-- Create auditoria_stock table for stock change tracking
+CREATE TABLE auditoria_stock (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    donacion_id INT NOT NULL,
+    cantidad_anterior INT NOT NULL,
+    cantidad_nueva INT NOT NULL,
+    cantidad_cambio INT NOT NULL,
+    motivo TEXT,
+    usuario_modificacion VARCHAR(50),
+    fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (donacion_id) REFERENCES donaciones(id),
+    INDEX idx_donacion_id (donacion_id),
+    INDEX idx_fecha_cambio (fecha_cambio),
+    INDEX idx_usuario_modificacion (usuario_modificacion)
+);
+
+-- Create tables for tracking donation transfers
+CREATE TABLE solicitudes_propias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) UNIQUE NOT NULL,
+    donaciones_json JSON NOT NULL,
+    usuario_creador VARCHAR(50),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activa BOOLEAN DEFAULT true,
+    fecha_baja TIMESTAMP NULL,
+    usuario_baja VARCHAR(50) NULL,
+    INDEX idx_id_solicitud (id_solicitud),
+    INDEX idx_fecha_creacion (fecha_creacion),
+    INDEX idx_activa (activa),
+    INDEX idx_fecha_baja (fecha_baja)
+);
+
+CREATE TABLE transferencias_enviadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) NOT NULL,
+    id_organizacion_solicitante VARCHAR(50) NOT NULL,
+    donaciones_json JSON NOT NULL,
+    usuario_transferencia VARCHAR(50),
+    fecha_transferencia TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_id_solicitud (id_solicitud),
+    INDEX idx_organizacion_solicitante (id_organizacion_solicitante),
+    INDEX idx_fecha_transferencia (fecha_transferencia)
+);
+
+CREATE TABLE transferencias_recibidas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_solicitud VARCHAR(50) NOT NULL,
+    id_organizacion_donante VARCHAR(50) NOT NULL,
+    donaciones_json JSON NOT NULL,
+    fecha_recepcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_transferencia (id_solicitud, id_organizacion_donante),
+    INDEX idx_id_solicitud (id_solicitud),
+    INDEX idx_organizacion_donante (id_organizacion_donante),
+    INDEX idx_fecha_recepcion (fecha_recepcion)
+);
+
+-- Create table for tracking adhesions to external events
+CREATE TABLE adhesiones_eventos_externos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_organizacion VARCHAR(50) NOT NULL,
+    id_evento VARCHAR(50) NOT NULL,
+    usuario_id INT NOT NULL,
+    fecha_adhesion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_adhesion (id_organizacion, id_evento, usuario_id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    INDEX idx_organizacion (id_organizacion),
+    INDEX idx_evento (id_evento),
+    INDEX idx_usuario_id (usuario_id),
+    INDEX idx_fecha_adhesion (fecha_adhesion)
+);
+
+-- Create table for tracking own donation offers
+CREATE TABLE ofertas_propias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_oferta VARCHAR(50) UNIQUE NOT NULL,
+    donaciones_json JSON NOT NULL,
+    usuario_creador VARCHAR(50),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_id_oferta (id_oferta),
+    INDEX idx_fecha_creacion (fecha_creacion)
+);

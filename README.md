@@ -1,6 +1,6 @@
 # Sistema ONG Backend - "Empuje Comunitario"
 
-A distributed backend platform for NGO management that handles users, donation inventory, and solidarity events. The system enables collaboration between NGOs through a messaging network for resource sharing and event coordination.
+Sistema backend distribuido para la gestión de ONGs "Empuje Comunitario" con arquitectura de microservicios, comunicación gRPC y red de colaboración entre organizaciones via Kafka.
 
 ## Architecture
 
@@ -29,36 +29,34 @@ This system follows a microservices architecture with the following components:
 - Future events only (no past event creation)
 - Stock validation for donation transfers
 
-## Quick Start
+## 🚀 Inicio Rápido
 
-### Prerequisites
+> **¿Eres nuevo en el proyecto?** 👉 Lee la [**Guía de Inicio Rápido**](GETTING_STARTED.md) para tener todo funcionando en 5 minutos.
 
-- Docker and Docker Compose
-- Node.js 18+ (for local development)
-- Python 3.11+ (for local development)
+### Para Usuarios Nuevos
 
-### Running with Docker
-
-1. Clone the repository:
+**1. Desplegar en 3 comandos:**
 ```bash
 git clone <repository-url>
 cd sistema-ong-backend
+scripts\deploy.bat    # Windows
+# o ./scripts/deploy.sh  # Linux/Mac
 ```
 
-2. Start the infrastructure services:
+**2. Verificar que funciona:**
 ```bash
-docker-compose up -d mysql zookeeper kafka
+python quick-start-check.py
 ```
 
-3. Wait for services to be ready (about 30 seconds), then start the application services:
-```bash
-docker-compose up -d api-gateway user-service inventory-service events-service
-```
+**3. Acceder al sistema:**
+- 🌐 **API**: http://localhost:3000
+- 📚 **Documentación**: http://localhost:3000/api-docs
+- 🔐 **Login**: `admin@ong.com` / `password123`
 
-4. Access the API:
-- API Gateway: http://localhost:3000
-- API Documentation: http://localhost:3000/api-docs (when implemented)
-- Health Check: http://localhost:3000/health
+### Documentación Completa
+- 📖 [**Guía de Inicio Rápido**](GETTING_STARTED.md) - Para nuevos usuarios
+- 📋 [**Resumen de Despliegue**](DEPLOYMENT_SUMMARY.md) - Estado del sistema
+- 🔧 [**Scripts de Utilidad**](scripts/README.md) - Comandos disponibles
 
 ### Development Setup
 

@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+package evento;
+
+// Servicio de gestión de eventos solidarios
+service EventoService {
+  rpc CrearEvento(CrearEventoRequest) returns (EventoResponse);
+  rpc ObtenerEvento(ObtenerEventoRequest) returns (EventoResponse);
+  rpc ListarEventos(ListarEventosRequest) returns (ListarEventosResponse);
+  rpc ActualizarEvento(ActualizarEventoRequest) returns (EventoResponse);
+  rpc EliminarEvento(EliminarEventoRequest) returns (EliminarEventoResponse);
+  rpc AgregarParticipante(AgregarParticipanteRequest) returns (ParticipanteResponse);
+  rpc QuitarParticipante(QuitarParticipanteRequest) returns (ParticipanteResponse);
+  rpc RegistrarDonacionesRepartidas(RegistrarDonacionesRequest) returns (RegistrarDonacionesResponse);
+  rpc ListarEventosExternos(ListarEventosExternosRequest) returns (ListarEventosExternosResponse);
+}
+
+// Mensajes de datos
+message Evento {
+  int32 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string fechaHora = 4;
+  repeated int32 participantesIds = 5;
+  repeated DonacionRepartida donacionesRepartidas = 6;
+  string fechaHoraAlta = 7;
+  string usuarioAlta = 8;
+  string fechaHoraModificacion = 9;
+  string usuarioModificacion = 10;
+}
+
+message DonacionRepartida {
+  int32 donacionId = 1;
+  int32 cantidadRepartida = 2;
+  string usuarioRegistro = 3;
+  string fechaHoraRegistro = 4;
+}
+
+message Participante {
+  int32 usuarioId = 1;
+  string nombreUsuario = 2;
+  string nombre = 3;
+  string apellido = 4;
+  string rol = 5;
+  string fechaAsignacion = 6;
+}
+
+// Requests
+message CrearEventoRequest {
+  string nombre = 1;
+  string descripcion = 2;
+  string fechaHora = 3; // Debe ser fecha futura
+  string usuarioCreador = 4;
+}
+
+message ObtenerEventoRequest {
+  int32 id = 1;
+}
+
+message ListarEventosRequest {
+  int32 pagina = 1;
+  int32 tamanoPagina = 2;
+  bool soloFuturos = 3; // Filtrar solo eventos futuros
+  bool soloPasados = 4; // Filtrar solo eventos pasados
+}
+
+message ActualizarEventoRequest {
+  int32 id = 1;
+  string nombre = 2;
+  string descripcion = 3;
+  string fechaHora = 4;
+  string usuarioModificacion = 5;
+}
+
+message EliminarEventoRequest {
+  int32 id = 1;
+  string usuarioEliminacion = 2;
+}
+
+message AgregarParticipanteRequest {
+  int32 eventoId = 1;
+  int32 usuarioId = 2;
+  string usuarioAsignacion = 3;
+}
+
+message QuitarParticipanteRequest {
+  int32 eventoId = 1;
+  int32 usuarioId = 2;
+  string usuarioRemocion = 3;
+}
+
+message RegistrarDonacionesRequest {
+  int32 eventoId = 1;
+  repeated DonacionRepartidaRequest donaciones = 2;
+  string usuarioRegistro = 3;
+}
+
+message DonacionRepartidaRequest {
+  int32 donacionId = 1;
+  int32 cantidadRepartida = 2;
+}
+
+message ListarEventosExternosRequest {
+  int32 pagina = 1;
+  int32 tamanoPagina = 2;
+  bool soloFuturos = 3;
+}
+
+// Responses
+message EventoResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Evento evento = 3;
+}
+
+message ListarEventosResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  repeated Evento eventos = 3;
+  int32 totalRegistros = 4;
+}
+
+message EliminarEventoResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+}
+
+message ParticipanteResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  Participante participante = 3;
+}
+
+message RegistrarDonacionesResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  repeated DonacionRepartida donacionesRegistradas = 3;
+}
+
+message EventoExterno {
+  string idOrganizacion = 1;
+  string idEvento = 2;
+  string nombre = 3;
+  string descripcion = 4;
+  string fechaHora = 5;
+  string fechaRecepcion = 6;
+}
+
+message ListarEventosExternosResponse {
+  bool exitoso = 1;
+  string mensaje = 2;
+  repeated EventoExterno eventos = 3;
+  int32 totalRegistros = 4;
+}

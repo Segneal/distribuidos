@@ -1,0 +1,1 @@
+# gRPC generated files for events service 
