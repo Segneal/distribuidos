@@ -1,36 +1,21 @@
 @echo off
-echo Generando codigo Python desde archivos .proto...
+setlocal enabledelayedexpansion
 
-REM Crear directorios si no existen
-if not exist "grpc\services\user-service\src\grpc" mkdir grpc\services\user-service\src\grpc
-if not exist "grpc\services\inventory-service\src\grpc" mkdir grpc\services\inventory-service\src\grpc
-if not exist "grpc\services\events-service\src\grpc" mkdir grpc\services\events-service\src\grpc
+set SCRIPT_DIR=%~dp0
+set ROOT_DIR=%SCRIPT_DIR%..
+set PROTO_DIR=%ROOT_DIR%\proto
+set USER_OUT=%ROOT_DIR%\services\user-service\src
+set INVENTORY_OUT=%ROOT_DIR%\services\inventory-service\src
+set EVENTS_OUT=%ROOT_DIR%\services\events-service\src
 
-REM Generar codigo para user-service
-echo Generando user-service...
-python -m grpc_tools.protoc -I./grpc/proto --python_out=./grpc/services/user-service/src/grpc --grpc_python_out=./grpc/services/user-service/src/grpc grpc/proto/user.proto
+if not exist "%USER_OUT%" mkdir "%USER_OUT%"
+if not exist "%INVENTORY_OUT%" mkdir "%INVENTORY_OUT%"
+if not exist "%EVENTS_OUT%" mkdir "%EVENTS_OUT%"
 
-REM Generar codigo para inventory-service
-echo Generando inventory-service...
-python -m grpc_tools.protoc -I./grpc/proto --python_out=./grpc/services/inventory-service/src/grpc --grpc_python_out=./grpc/services/inventory-service/src/grpc grpc/proto/inventory.proto
-
-REM Generar codigo para events-service
-echo Generando events-service...
-python -m grpc_tools.protoc -I./grpc/proto --python_out=./grpc/services/events-service/src/grpc --grpc_python_out=./grpc/services/events-service/src/grpc grpc/proto/events.proto
-
-REM Crear archivos __init__.py si no existen
-if not exist "grpc\services\user-service\src\grpc\__init__.py" echo # gRPC generated files for user service > grpc\services\user-service\src\grpc\__init__.py
-if not exist "grpc\services\inventory-service\src\grpc\__init__.py" echo # gRPC generated files for inventory service > grpc\services\inventory-service\src\grpc\__init__.py
-if not exist "grpc\services\events-service\src\grpc\__init__.py" echo # gRPC generated files for events service > grpc\services\events-service\src\grpc\__init__.py
+echo Generating gRPC stubs...
+python -m grpc_tools.protoc -I"%PROTO_DIR%" --python_out="%USER_OUT%" --grpc_python_out="%USER_OUT%" "%PROTO_DIR%\user.proto"
+python -m grpc_tools.protoc -I"%PROTO_DIR%" --python_out="%INVENTORY_OUT%" --grpc_python_out="%INVENTORY_OUT%" "%PROTO_DIR%\inventory.proto"
+python -m grpc_tools.protoc -I"%PROTO_DIR%" --python_out="%EVENTS_OUT%" --grpc_python_out="%EVENTS_OUT%" "%PROTO_DIR%\events.proto"
 
 echo.
-echo ✅ Codigo Python generado exitosamente!
-echo.
-echo Archivos generados:
-echo - grpc/services/user-service/src/grpc/user_pb2.py
-echo - grpc/services/user-service/src/grpc/user_pb2_grpc.py
-echo - grpc/services/inventory-service/src/grpc/inventory_pb2.py
-echo - grpc/services/inventory-service/src/grpc/inventory_pb2_grpc.py
-echo - grpc/services/events-service/src/grpc/events_pb2.py
-echo - grpc/services/events-service/src/grpc/events_pb2_grpc.py
-pause
+echo gRPC Python stubs generated successfully.

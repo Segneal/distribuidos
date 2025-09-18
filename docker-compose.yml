@@ -66,7 +66,7 @@ services:
 
   # API Gateway
   api-gateway:
-    build: 
+    build:
       context: .
       dockerfile: ./api-gateway/Dockerfile
     container_name: ong-api-gateway
@@ -88,6 +88,7 @@ services:
       - EVENTS_SERVICE_HOST=events-service
       - EVENTS_SERVICE_PORT=50053
       - KAFKA_BROKERS=kafka:9092
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
       - ORGANIZATION_ID=${ORGANIZATION_ID:-ong-empuje-comunitario}
     volumes:
       - ./grpc-services/proto:/app/grpc-services/proto:ro
@@ -105,7 +106,7 @@ services:
       events-service:
         condition: service_started
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:3000/health', res => { process.exit(res.statusCode === 200 ? 0 : 1); }).on('error', () => process.exit(1));\""]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -138,7 +139,7 @@ services:
       kafka:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50051\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'"]
+      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50051\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -170,7 +171,7 @@ services:
       kafka:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50052\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'"]
+      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50052\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -202,11 +203,28 @@ services:
       kafka:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50053\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'"]
+      test: ["CMD-SHELL", "python -c 'import grpc; import sys; from grpc_health.v1 import health_pb2_grpc, health_pb2; channel = grpc.insecure_channel(\"localhost:50053\"); stub = health_pb2_grpc.HealthStub(channel); response = stub.Check(health_pb2.HealthCheckRequest()); sys.exit(0 if response.status == health_pb2.HealthCheckResponse.SERVING else 1)'" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    restart: unless-stopped
+
+  # Frontend SPA
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ong-frontend
+    ports:
+      - "5173:80"
+    environment:
+      - VITE_API_BASE_URL=${VITE_API_BASE_URL:-http://localhost:3000}
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    networks:
+      - ong-network
     restart: unless-stopped
 
 volumes:

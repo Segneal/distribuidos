@@ -1,4 +1,4 @@
-// CORS middleware configuration
+﻿// CORS middleware configuration
 const cors = require('cors');
 
 const corsOptions = {
@@ -11,6 +11,8 @@ const corsOptions = {
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:8080',
+      'http://localhost:5173',
+      'http://127.0.0.1:5173',
       process.env.FRONTEND_URL
     ].filter(Boolean); // Remove undefined values
     
