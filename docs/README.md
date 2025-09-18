@@ -1,37 +1,37 @@
-# Documentation
+﻿# Documentación
 
-This directory contains all documentation for the Sistema ONG Backend project.
+Este directorio reúne toda la documentación del proyecto Sistema ONG Backend.
 
-## Structure
+## Estructura
 
-- `api/` - API documentation and specifications
-- `architecture/` - System architecture diagrams and documentation
-- `deployment/` - Deployment guides and configuration
-- `development/` - Development setup and guidelines
+- `api/` - Documentación y especificaciones de la API.
+- `architecture/` - Diagramas y documentación de arquitectura.
+- `deployment/` - Guías de despliegue y configuración.
+- `development/` - Configuración y lineamientos de desarrollo.
 
-## API Documentation
+## Documentación de la API
 
-The API documentation is automatically generated using Swagger/OpenAPI and is available at:
-- Development: http://localhost:3000/api-docs
-- Production: [Production URL]/api-docs
+La documentación de la API se genera automáticamente con Swagger/OpenAPI y está disponible en:
+- Desarrollo: http://localhost:3000/api-docs
+- Producción: [URL de producción]/api-docs
 
-## Architecture Overview
+## Resumen de la arquitectura
 
-The system follows a microservices architecture with:
-- API Gateway (Node.js + Express)
-- User Service (Python + gRPC)
-- Inventory Service (Python + gRPC)
-- Events Service (Python + gRPC)
-- MySQL Database
-- Apache Kafka for messaging
+El sistema adopta una arquitectura de microservicios compuesta por:
+- API Gateway (Node.js + Express).
+- Servicio de usuarios (Python + gRPC).
+- Servicio de inventario (Python + gRPC).
+- Servicio de eventos (Python + gRPC).
+- Base de datos MySQL.
+- Apache Kafka para mensajería.
 
-## Getting Started
+## Cómo empezar
 
-1. See the main [README.md](../README.md) for quick start instructions
-2. Check individual service README files for detailed setup
-3. Review the API documentation for endpoint specifications
-4. Follow the development guidelines for contributing
+1. Consultá el [README.md](../README.md) principal para ver el inicio rápido.
+2. Revisá los README de cada servicio para configuraciones específicas.
+3. Analizá la documentación de la API para conocer los endpoints.
+4. Seguí las guías de desarrollo antes de contribuir.
 
-## Support
+## Soporte
 
-For questions about the documentation or system architecture, please contact the development team.
+Ante dudas sobre la documentación o la arquitectura, contactá al equipo de desarrollo.

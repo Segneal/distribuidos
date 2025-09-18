@@ -22,7 +22,7 @@ git --version
 
 ```bash
 git clone <repository-url>
-cd sistema-ong-backend
+cd distribuidos
 ```
 
 ### Paso 3: Desplegar Todo (2 minutos)

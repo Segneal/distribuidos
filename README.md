@@ -1,44 +1,44 @@
-# Sistema ONG Backend - "Empuje Comunitario"
+﻿# Sistema ONG Backend - 'Empuje Comunitario'
 
-Sistema backend distribuido para la gestión de ONGs "Empuje Comunitario" con arquitectura de microservicios, comunicación gRPC y red de colaboración entre organizaciones via Kafka.
+Sistema backend distribuido para la gestión de ONGs 'Empuje Comunitario' con arquitectura de microservicios, comunicación gRPC y red de colaboración entre organizaciones vía Kafka.
 
-## Architecture
+## Arquitectura
 
-This system follows a microservices architecture with the following components:
+Este sistema sigue una arquitectura de microservicios con los siguientes componentes:
 
-- **API Gateway** (Node.js + Express): REST API endpoints and request routing
-- **User Service** (Python + gRPC): User management and authentication
-- **Inventory Service** (Python + gRPC): Donation inventory management
-- **Events Service** (Python + gRPC): Solidarity events management
-- **MySQL Database**: Data persistence
-- **Apache Kafka**: Inter-NGO messaging and event streaming
+- **API Gateway** (Node.js + Express): expone endpoints REST y enruta solicitudes.
+- **User Service** (Python + gRPC): administración de usuarios y autenticación.
+- **Inventory Service** (Python + gRPC): gestión del inventario de donaciones.
+- **Events Service** (Python + gRPC): gestión de eventos solidarios.
+- **Base de datos MySQL**: persistencia de la información.
+- **Apache Kafka**: mensajería entre ONGs y publicación de eventos.
 
-## Features
+## Características
 
-### Core Features
-- **User Management**: Role-based access control (Presidente, Vocal, Coordinador, Voluntario)
-- **Donation Inventory**: Track and manage donations by category (ROPA, ALIMENTOS, JUGUETES, UTILES_ESCOLARES)
-- **Event Management**: Create and manage solidarity events with participant assignment
-- **Inter-NGO Network**: Request, offer, and transfer donations between organizations
-- **External Event Participation**: Allow volunteers to join events from other NGOs
+### Características principales
+- **Gestión de usuarios**: control de acceso por roles (Presidente, Vocal, Coordinador, Voluntario).
+- **Inventario de donaciones**: seguimiento por categorías (ROPA, ALIMENTOS, JUGUETES, UTILES_ESCOLARES).
+- **Gestión de eventos**: creación de eventos solidarios con asignación de participantes.
+- **Red inter-ONG**: solicitud, oferta y transferencia de donaciones entre organizaciones.
+- **Participación en eventos externos**: voluntarios pueden sumarse a eventos de otras ONGs.
 
-### Key Business Rules
-- All operations require proper role-based authorization
-- Audit trails are mandatory for all critical operations
-- Logical deletion is preferred over physical deletion
-- Future events only (no past event creation)
-- Stock validation for donation transfers
+### Reglas de negocio clave
+- Todas las operaciones requieren autorización según el rol.
+- Se registran auditorías para operaciones críticas.
+- Se prefiere la baja lógica sobre la eliminación física.
+- Solo se permiten eventos futuros.
+- Se valida el stock antes de transferir donaciones.
 
-## 🚀 Inicio Rápido
+## 🚀 Inicio rápido
 
 > **¿Eres nuevo en el proyecto?** 👉 Lee la [**Guía de Inicio Rápido**](GETTING_STARTED.md) para tener todo funcionando en 5 minutos.
 
-### Para Usuarios Nuevos
+### Para personas nuevas
 
 **1. Desplegar en 3 comandos:**
 ```bash
 git clone <repository-url>
-cd sistema-ong-backend
+cd distribuidos
 scripts\deploy.bat    # Windows
 # o ./scripts/deploy.sh  # Linux/Mac
 ```
@@ -58,129 +58,129 @@ python quick-start-check.py
 - 📋 [**Resumen de Despliegue**](DEPLOYMENT_SUMMARY.md) - Estado del sistema
 - 🔧 [**Scripts de Utilidad**](scripts/README.md) - Comandos disponibles
 
-### Development Setup
+### Configuración para desarrollo
 
-#### Quick Setup (Recommended)
+#### Configuración rápida (recomendada)
 ```bash
-# Setup complete gRPC environment
+# Configurar todo el entorno gRPC
 grpc/scripts/setup.bat          # Windows
 ./grpc/scripts/setup.sh         # Linux/Mac
 
-# Start all gRPC services
+# Iniciar todos los servicios gRPC
 grpc/scripts/start-services.bat # Windows
 ./grpc/scripts/start-services.sh # Linux/Mac
 
-# Start API Gateway (in separate terminal)
+# Iniciar el API Gateway (en otra terminal)
 cd api-gateway && npm install && npm start
 ```
 
-#### Manual Setup
-Each service can be run individually for development. See individual README files in each service directory for specific setup instructions.
+#### Configuración manual
+Cada servicio puede ejecutarse de manera individual durante el desarrollo. Revisa los README específicos de cada servicio para instrucciones detalladas.
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 sistema-ong-backend/
-├── api-gateway/                 # Node.js Express API Gateway
-│   ├── src/                    # Source code
-│   ├── package.json           # Dependencies
-│   └── README.md              # Gateway documentation
-├── grpc/                       # gRPC Backend Services
-│   ├── proto/                 # Protocol Buffer definitions
-│   │   ├── user.proto         # User service definitions
-│   │   ├── inventory.proto    # Inventory service definitions
-│   │   └── events.proto       # Events service definitions
-│   ├── services/              # Python gRPC microservices
-│   │   ├── user-service/      # User management service
-│   │   ├── inventory-service/ # Donation inventory service
-│   │   └── events-service/    # Events management service
-│   ├── scripts/               # Utility scripts
-│   │   ├── generate-proto.bat # Generate Python code from .proto
-│   │   ├── start-services.bat # Start all gRPC services
-│   │   └── setup.bat          # Complete environment setup
-│   └── README.md              # gRPC services documentation
-├── database/                   # Database schemas and migrations
-│   ├── init/                  # Initialization scripts
-│   ├── migrate.sql            # Complete migration script
-│   └── README.md              # Database documentation
-├── docs/                       # API documentation
-├── tests/                      # Integration tests
-├── scripts/                    # General utility scripts
-├── docker-compose.yml          # Full system orchestration
-└── README.md                   # This file
+├── api-gateway/                 # API Gateway en Node.js y Express
+│   ├── src/                    # Código fuente
+│   ├── package.json           # Dependencias
+│   └── README.md              # Documentación del gateway
+├── grpc/                       # Servicios backend gRPC
+│   ├── proto/                 # Definiciones Protocol Buffer
+│   │   ├── user.proto         # Definiciones del servicio de usuarios
+│   │   ├── inventory.proto    # Definiciones del servicio de inventario
+│   │   └── events.proto       # Definiciones del servicio de eventos
+│   ├── services/              # Microservicios gRPC en Python
+│   │   ├── user-service/      # Servicio de gestión de usuarios
+│   │   ├── inventory-service/ # Servicio de inventario de donaciones
+│   │   └── events-service/    # Servicio de gestión de eventos
+│   ├── scripts/               # Scripts de utilidad
+│   │   ├── generate-proto.bat # Generar código Python a partir de .proto
+│   │   ├── start-services.bat # Iniciar todos los servicios gRPC
+│   │   └── setup.bat          # Configuración del entorno
+│   └── README.md              # Documentación de los servicios gRPC
+├── database/                   # Esquemas y migraciones de base de datos
+│   ├── init/                  # Scripts de inicialización
+│   ├── migrate.sql            # Script de migración completa
+│   └── README.md              # Documentación de la base de datos
+├── docs/                       # Documentación de la API
+├── tests/                      # Pruebas de integración
+├── scripts/                    # Scripts generales de utilidad
+├── docker-compose.yml          # Orquestación del sistema completo
+└── README.md                   # Este archivo
 ```
 
-## API Endpoints
+## Endpoints de la API
 
-### Authentication
-- `POST /api/auth/login` - User authentication
-- `GET /api/auth/perfil` - Get user profile
+### Autenticación
+- `POST /api/auth/login` - Autentica usuarios.
+- `GET /api/auth/perfil` - Obtiene el perfil del usuario autenticado.
 
-### Users (Presidente only)
-- `GET /api/usuarios` - List all users
-- `POST /api/usuarios` - Create new user
-- `PUT /api/usuarios/:id` - Update user
-- `DELETE /api/usuarios/:id` - Delete user
+### Usuarios (solo Presidente)
+- `GET /api/usuarios` - Lista usuarios.
+- `POST /api/usuarios` - Crea un usuario.
+- `PUT /api/usuarios/:id` - Actualiza un usuario.
+- `DELETE /api/usuarios/:id` - Elimina un usuario.
 
-### Inventory (Presidente, Vocal)
-- `GET /api/inventario` - List donations
-- `POST /api/inventario` - Add donation
-- `PUT /api/inventario/:id` - Update donation
-- `DELETE /api/inventario/:id` - Delete donation
+### Inventario (Presidente, Vocal)
+- `GET /api/inventario` - Lista donaciones.
+- `POST /api/inventario` - Agrega una donación.
+- `PUT /api/inventario/:id` - Actualiza una donación.
+- `DELETE /api/inventario/:id` - Elimina una donación.
 
-### Events (Presidente, Coordinador, Voluntario)
-- `GET /api/eventos` - List events
-- `POST /api/eventos` - Create event
-- `PUT /api/eventos/:id` - Update event
-- `DELETE /api/eventos/:id` - Delete event
-- `POST /api/eventos/:id/participantes` - Add participant
-- `DELETE /api/eventos/:id/participantes/:usuarioId` - Remove participant
+### Eventos (Presidente, Coordinador, Voluntario)
+- `GET /api/eventos` - Lista eventos.
+- `POST /api/eventos` - Crea un evento.
+- `PUT /api/eventos/:id` - Actualiza un evento.
+- `DELETE /api/eventos/:id` - Elimina un evento.
+- `POST /api/eventos/:id/participantes` - Agrega un participante.
+- `DELETE /api/eventos/:id/participantes/:usuarioId` - Quita un participante.
 
-### Inter-NGO Network
-- `GET /api/red/solicitudes-donaciones` - List donation requests
-- `POST /api/red/solicitudes-donaciones` - Create donation request
-- `GET /api/red/ofertas-donaciones` - List donation offers
-- `POST /api/red/ofertas-donaciones` - Create donation offer
-- `POST /api/red/transferencias-donaciones` - Transfer donations
-- `GET /api/red/eventos-externos` - List external events
-- `POST /api/red/eventos-externos/adhesion` - Join external event
+### Red inter-ONG
+- `GET /api/red/solicitudes-donaciones` - Lista solicitudes de donaciones.
+- `POST /api/red/solicitudes-donaciones` - Crea una solicitud de donaciones.
+- `GET /api/red/ofertas-donaciones` - Lista ofertas de donaciones.
+- `POST /api/red/ofertas-donaciones` - Crea una oferta de donaciones.
+- `POST /api/red/transferencias-donaciones` - Registra una transferencia de donaciones.
+- `GET /api/red/eventos-externos` - Lista eventos externos.
+- `POST /api/red/eventos-externos/adhesion` - Adhiere a un evento externo.
 
-## Kafka Topics
+## Temas de Kafka
 
-- `/solicitud-donaciones` - Donation requests between NGOs
-- `/transferencia-donaciones/{orgId}` - Donation transfers
-- `/oferta-donaciones` - Donation offers
-- `/baja-solicitud-donaciones` - Request cancellations
-- `/eventos-solidarios` - External events publication
-- `/baja-evento-solidario` - Event cancellations
-- `/adhesion-evento/{orgId}` - Event participation
+- `/solicitud-donaciones` - Solicitudes de donaciones entre ONGs.
+- `/transferencia-donaciones/{orgId}` - Transferencias de donaciones.
+- `/oferta-donaciones` - Ofertas de donaciones.
+- `/baja-solicitud-donaciones` - Bajas de solicitudes.
+- `/eventos-solidarios` - Publicación de eventos solidarios.
+- `/baja-evento-solidario` - Bajas de eventos.
+- `/adhesion-evento/{orgId}` - Adhesiones a eventos.
 
-## Testing
+## Pruebas
 
-Run tests for individual services:
+Para ejecutar pruebas por servicio:
 
 ```bash
 # API Gateway
 cd api-gateway && npm test
 
-# gRPC Python services
+# Servicios gRPC en Python
 cd grpc/services/user-service && python -m pytest
 cd grpc/services/inventory-service && python -m pytest
 cd grpc/services/events-service && python -m pytest
 ```
 
-## Contributing
+## Contribuciones
 
-1. Follow the established project structure
-2. Each service must have its own README.md
-3. All endpoints require proper authentication and authorization
-4. Include unit tests for new functionality
-5. Update API documentation when adding new endpoints
+1. Respeta la estructura del proyecto.
+2. Cada servicio debe tener su propio README.md.
+3. Todos los endpoints requieren autenticación y autorización.
+4. Incluye pruebas unitarias para la funcionalidad nueva.
+5. Actualiza la documentación de la API al agregar endpoints.
 
-## License
+## Licencia
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Este proyecto está licenciado bajo MIT. Consultá el archivo LICENSE para más detalles.
 
-## Support
+## Soporte
 
-For questions or support, please contact the development team.
+Para consultas o soporte, contactá al equipo de desarrollo.

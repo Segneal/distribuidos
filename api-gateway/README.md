@@ -26,7 +26,7 @@ El API Gateway sirve como la puerta de entrada unificada para el sistema distrib
 - Registro de donaciones repartidas
 - Permisos diferenciados por rol
 
-#### Red de ONGs (Kafka Integration)
+#### Red de ONGs (integración con Kafka)
 - Solicitudes de donaciones entre organizaciones
 - Ofertas de donaciones disponibles
 - Transferencias de recursos
@@ -106,18 +106,18 @@ Editar el archivo `.env` con las configuraciones específicas de tu entorno:
 PORT=3000
 NODE_ENV=development
 
-# JWT Configuration
+# Configuración JWT
 JWT_SECRET=your_super_secret_jwt_key_change_in_production
 JWT_EXPIRES_IN=24h
 
-# Database Configuration
+# Configuración de base de datos
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=ong_sistema
 DB_USER=ong_user
 DB_PASSWORD=ong_password
 
-# gRPC Services Configuration
+# Configuración de servicios gRPC
 USER_SERVICE_HOST=localhost
 USER_SERVICE_PORT=50051
 INVENTORY_SERVICE_HOST=localhost
@@ -125,13 +125,13 @@ INVENTORY_SERVICE_PORT=50052
 EVENTS_SERVICE_HOST=localhost
 EVENTS_SERVICE_PORT=50053
 
-# Frontend Configuration
+# Configuración del frontend
 FRONTEND_URL=http://localhost:3001
 
-# Organization Configuration
+# Configuración de la organización
 ORGANIZATION_ID=ong-empuje-comunitario
 
-# Kafka Configuration
+# Configuración de Kafka
 KAFKA_BROKERS=localhost:9092
 ```
 
@@ -157,7 +157,7 @@ npm start
 
 Una vez iniciado el servidor, puedes verificar que todo funciona correctamente:
 
-1. **Health Check:**
+1. **Chequeo de salud:**
 ```bash
 curl http://localhost:3000/health
 ```
@@ -401,10 +401,10 @@ curl -X GET http://localhost:3000/api/red/eventos-externos \
 Para desarrollo y debugging, puedes usar los scripts de testing incluidos:
 
 ```bash
-# Test simple del servidor
+# Prueba simple del servidor
 node test-server-simple.js
 
-# Test de endpoints específicos
+# Prueba de endpoints específicos
 node test-adhesion-simple.js
 node test-ofertas-simple.js
 node test-baja-solicitudes-simple.js
@@ -467,7 +467,7 @@ KAFKA_BROKERS=localhost:9092
 
 ### Funcionalidades Implementadas
 
-#### Core Features
+#### Funciones principales
 - ✅ Autenticación JWT completa
 - ✅ Autorización basada en roles
 - ✅ CRUD completo de usuarios
@@ -475,7 +475,7 @@ KAFKA_BROKERS=localhost:9092
 - ✅ CRUD completo de eventos
 - ✅ Gestión de participantes en eventos
 
-#### Red de ONGs (Kafka Integration)
+#### Red de ONGs (integración con Kafka)
 - ✅ Solicitudes de donaciones
 - ✅ Ofertas de donaciones
 - ✅ Transferencias de donaciones

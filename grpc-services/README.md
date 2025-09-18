@@ -1,6 +1,6 @@
-# gRPC Backend Services
+﻿# Servicios backend gRPC
 
-Este directorio contiene todos los componentes relacionados con gRPC del Sistema ONG Backend.
+Este directorio agrupa todos los componentes gRPC del Sistema ONG Backend.
 
 ## Estructura
 
@@ -24,27 +24,27 @@ grpc/
 
 ## Servicios gRPC
 
-### UsuarioService
+### Servicio de usuarios
 - **Puerto**: 50051
-- **Responsabilidades**: Autenticación, gestión de usuarios, validación de tokens
+- **Responsabilidades**: autenticación, gestión de usuarios, validación de tokens.
 
-### InventarioService  
+### Servicio de inventario
 - **Puerto**: 50052
-- **Responsabilidades**: Gestión de donaciones, control de stock
+- **Responsabilidades**: gestión de donaciones y control de stock.
 
-### EventoService
+### Servicio de eventos
 - **Puerto**: 50053
-- **Responsabilidades**: Gestión de eventos, participantes, donaciones repartidas
+- **Responsabilidades**: gestión de eventos, participantes y donaciones repartidas.
 
-## Comandos Rápidos
+## Comandos rápidos
 
 ```bash
-# Generar código Python desde proto files
+# Generar código Python desde los archivos .proto
 ./grpc/scripts/generate-proto.sh
 
 # Iniciar todos los servicios gRPC
 ./grpc/scripts/start-services.sh
 
-# Iniciar servicio individual
+# Iniciar un servicio individual
 cd grpc/services/user-service && python src/main.py
 ```
