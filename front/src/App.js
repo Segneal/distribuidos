@@ -5,6 +5,8 @@ import LoginPage from './pages/LoginPage';
 import UsuariosPage from './pages/UsuariosPage';
 import InventarioPage from './pages/InventarioPage';
 import EventosPage from './pages/EventosPage';
+import TestApiPage from './pages/TestApiPage';
+
 
 function PrivateRoute({ children, roles }) {
   const { user } = useAuth();
@@ -47,6 +49,7 @@ export default function App(){
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/test" element={<TestApiPage />} />
           <Route path="/usuarios" element={
             <PrivateRoute roles={['PRESIDENTE']}>
               <UsuariosPage />
