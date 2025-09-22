@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "inventory-collection-003",
+		"name": "03 - Inventario",
+		"description": "Colección para testing de endpoints de gestión de inventario de donaciones (Presidente, Vocal)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Donaciones",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has donations array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('donaciones');",
+							"    pm.expect(jsonData).to.have.property('total');",
+							"    pm.expect(jsonData).to.have.property('pagina');",
+							"    pm.expect(jsonData).to.have.property('limite');",
+							"    pm.expect(jsonData.donaciones).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/inventario?page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Donación - Alimentos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created donation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('donacion');",
+							"    pm.expect(jsonData.donacion.categoria).to.eql('ALIMENTOS');",
+							"    pm.expect(jsonData.donacion.cantidad).to.eql(50);",
+							"    ",
+							"    // Store created donation ID for subsequent tests",
+							"    pm.environment.set('created_donation_id', jsonData.donacion.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"ALIMENTOS\",\n    \"descripcion\": \"Puré de tomates en lata - 400g\",\n    \"cantidad\": 50\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Donación - Ropa",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created donation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.donacion.categoria).to.eql('ROPA');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"ROPA\",\n    \"descripcion\": \"Camisetas de algodón talle M\",\n    \"cantidad\": 25\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Donación - Juguetes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created donation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.donacion.categoria).to.eql('JUGUETES');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"JUGUETES\",\n    \"descripcion\": \"Pelotas de fútbol\",\n    \"cantidad\": 10\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Donación - Útiles Escolares",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created donation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.donacion.categoria).to.eql('UTILES_ESCOLARES');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"UTILES_ESCOLARES\",\n    \"descripcion\": \"Cuadernos rayados 100 hojas\",\n    \"cantidad\": 30\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Donación - Datos Inválidos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response has validation error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('error');",
+							"    pm.expect(jsonData.codigo).to.eql('INVALID_DONATION_DATA');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"CATEGORIA_INVALIDA\",\n    \"descripcion\": \"\",\n    \"cantidad\": -5\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Donación por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has donation data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('donacion');",
+							"    pm.expect(jsonData.donacion).to.have.property('id');",
+							"    pm.expect(jsonData.donacion).to.have.property('categoria');",
+							"    pm.expect(jsonData.donacion).to.have.property('descripcion');",
+							"    pm.expect(jsonData.donacion).to.have.property('cantidad');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/inventario/{{created_donation_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario",
+						"{{created_donation_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Donación - ID Inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response indicates not found\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('DONATION_NOT_FOUND');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/inventario/99999",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar Donación",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has updated donation\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('donacion');",
+							"    pm.expect(jsonData.donacion.descripcion).to.include('Actualizado');",
+							"    pm.expect(jsonData.donacion.cantidad).to.eql(75);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"descripcion\": \"Puré de tomates en lata - 400g - Actualizado\",\n    \"cantidad\": 75\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario/{{created_donation_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario",
+						"{{created_donation_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Donación",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms deletion\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('eliminada exitosamente');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/inventario/{{created_donation_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario",
+						"{{created_donation_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acceso Denegado - Coordinador intenta crear donación",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Login as Coordinador first",
+							"pm.sendRequest({",
+							"    url: pm.environment.get('base_url') + '/api/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            identificador: 'coordinador@ong.com',",
+							"            clave: 'coord123'",
+							"        })",
+							"    }",
+							"}, function (err, response) {",
+							"    if (response.json().token) {",
+							"        pm.environment.set('coordinador_token', response.json().token);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"Response indicates insufficient permissions\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('INSUFFICIENT_PERMISSIONS');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{coordinador_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"categoria\": \"ALIMENTOS\",\n    \"descripcion\": \"Intento de coordinador\",\n    \"cantidad\": 10\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/inventario",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"inventario"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}

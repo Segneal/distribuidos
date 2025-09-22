@@ -44,7 +44,9 @@ class SQLDataExtractor:
                 database=self.db_config.database,
                 user=self.db_config.user,
                 password=self.db_config.password,
-                autocommit=True
+                autocommit=True,
+                auth_plugin='mysql_native_password',
+                ssl_disabled=True
             )
             logger.info("Database connection established successfully")
         except mysql.connector.Error as e:

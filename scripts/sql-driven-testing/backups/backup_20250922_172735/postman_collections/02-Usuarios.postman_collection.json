@@ -1,0 +1,531 @@
+{
+	"info": {
+		"_postman_id": "users-collection-002",
+		"name": "02 - Usuarios",
+		"description": "Colección para testing de endpoints de gestión de usuarios (solo Presidente)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Usuarios",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has users array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('usuarios');",
+							"    pm.expect(jsonData).to.have.property('total');",
+							"    pm.expect(jsonData).to.have.property('page');",
+							"    pm.expect(jsonData).to.have.property('limit');",
+							"    pm.expect(jsonData.usuarios).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/usuarios?page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Usuario - Vocal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('usuario');",
+							"    pm.expect(jsonData.usuario.rol).to.eql('VOCAL');",
+							"    ",
+							"    // Store created user ID for subsequent tests",
+							"    pm.environment.set('created_user_id', jsonData.usuario.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombreUsuario\": \"nuevo_vocal\",\n    \"nombre\": \"Nuevo\",\n    \"apellido\": \"Vocal\",\n    \"telefono\": \"+54 11 9876-5432\",\n    \"email\": \"nuevo.vocal@ong.com\",\n    \"rol\": \"VOCAL\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Usuario - Coordinador",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.usuario.rol).to.eql('COORDINADOR');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombreUsuario\": \"nuevo_coordinador\",\n    \"nombre\": \"Nuevo\",\n    \"apellido\": \"Coordinador\",\n    \"telefono\": \"+54 11 1111-2222\",\n    \"email\": \"nuevo.coordinador@ong.com\",\n    \"rol\": \"COORDINADOR\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Usuario - Voluntario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.usuario.rol).to.eql('VOLUNTARIO');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombreUsuario\": \"nuevo_voluntario\",\n    \"nombre\": \"Nuevo\",\n    \"apellido\": \"Voluntario\",\n    \"telefono\": \"+54 11 3333-4444\",\n    \"email\": \"nuevo.voluntario@ong.com\",\n    \"rol\": \"VOLUNTARIO\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Usuario - Datos Inválidos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response has validation error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('error');",
+							"    pm.expect(jsonData.codigo).to.eql('VALIDATION_ERROR');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombreUsuario\": \"\",\n    \"nombre\": \"\",\n    \"email\": \"invalid-email\",\n    \"rol\": \"INVALID_ROLE\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Usuario por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has user data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('usuario');",
+							"    pm.expect(jsonData.usuario).to.have.property('id');",
+							"    pm.expect(jsonData.usuario).to.have.property('nombreUsuario');",
+							"    pm.expect(jsonData.usuario).to.have.property('rol');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/usuarios/{{created_user_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Usuario - ID Inexistente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response indicates not found\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('RESOURCE_NOT_FOUND');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/usuarios/99999",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has updated user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('usuario');",
+							"    pm.expect(jsonData.usuario.nombre).to.eql('Nombre Actualizado');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Nombre Actualizado\",\n    \"apellido\": \"Apellido Actualizado\",\n    \"telefono\": \"+54 11 5555-6666\",\n    \"email\": \"actualizado@ong.com\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios/{{created_user_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Usuario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms deletion\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('eliminado exitosamente');",
+							"    pm.expect(jsonData.codigo).to.eql('USER_DELETED');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/usuarios/{{created_user_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios",
+						"{{created_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acceso Denegado - Vocal intenta crear usuario",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Login as Vocal first",
+							"pm.sendRequest({",
+							"    url: pm.environment.get('base_url') + '/api/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            identificador: 'vocal@ong.com',",
+							"            clave: 'vocal123'",
+							"        })",
+							"    }",
+							"}, function (err, response) {",
+							"    if (response.json().token) {",
+							"        pm.environment.set('vocal_token', response.json().token);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"Response indicates insufficient permissions\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('INSUFFICIENT_PERMISSIONS');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{vocal_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombreUsuario\": \"intento_vocal\",\n    \"nombre\": \"Intento\",\n    \"apellido\": \"Vocal\",\n    \"email\": \"intento@ong.com\",\n    \"rol\": \"VOLUNTARIO\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/usuarios",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"usuarios"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}

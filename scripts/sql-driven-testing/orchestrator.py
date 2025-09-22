@@ -464,7 +464,15 @@ class TestingOrchestrator:
     
     def _extract_test_data(self):
         """Extract test data from SQL database"""
-        db_config = DatabaseConfig(**self.config['database'])
+        # Filter database config to only include supported parameters
+        db_params = {
+            'host': self.config['database']['host'],
+            'port': self.config['database']['port'],
+            'database': self.config['database']['database'],
+            'user': self.config['database']['user'],
+            'password': self.config['database']['password']
+        }
+        db_config = DatabaseConfig(**db_params)
         self.data_extractor = SQLDataExtractor(db_config)
         
         try:

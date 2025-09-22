@@ -54,7 +54,15 @@ def validate_database_connection(config: Dict[str, Any]) -> bool:
     """Valida que se pueda conectar a la base de datos"""
     try:
         from data_extractor import DatabaseConfig
-        db_config = DatabaseConfig(**config['database'])
+        # Filter database config to only include supported parameters
+        db_params = {
+            'host': config['database']['host'],
+            'port': config['database']['port'],
+            'database': config['database']['database'],
+            'user': config['database']['user'],
+            'password': config['database']['password']
+        }
+        db_config = DatabaseConfig(**db_params)
         extractor = SQLDataExtractor(db_config)
         return extractor.test_connection()
     except Exception as e:

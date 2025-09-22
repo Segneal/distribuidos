@@ -1,0 +1,715 @@
+{
+	"info": {
+		"_postman_id": "events-collection-004",
+		"name": "04 - Eventos",
+		"description": "Colección para testing de endpoints de gestión de eventos solidarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Eventos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has events array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('eventos');",
+							"    pm.expect(jsonData).to.have.property('total');",
+							"    pm.expect(jsonData).to.have.property('page');",
+							"    pm.expect(jsonData).to.have.property('limit');",
+							"    pm.expect(jsonData.eventos).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/eventos?page=1&limit=10",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Evento - Presidente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created event\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('evento');",
+							"    pm.expect(jsonData.evento.nombre).to.eql('Entrega de alimentos en Villa 31');",
+							"    ",
+							"    // Store created event ID for subsequent tests",
+							"    pm.environment.set('created_event_id', jsonData.evento.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Entrega de alimentos en Villa 31\",\n    \"descripcion\": \"Evento solidario para entregar alimentos a familias necesitadas del barrio Villa 31\",\n    \"fechaHora\": \"2024-12-25T14:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Evento - Coordinador",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Login as Coordinador first",
+							"pm.sendRequest({",
+							"    url: pm.environment.get('base_url') + '/api/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            identificador: 'coordinador@ong.com',",
+							"            clave: 'coord123'",
+							"        })",
+							"    }",
+							"}, function (err, response) {",
+							"    if (response.json().token) {",
+							"        pm.environment.set('coordinador_token', response.json().token);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Response has created event\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.evento.nombre).to.eql('Jornada de vacunación');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{coordinador_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Jornada de vacunación\",\n    \"descripcion\": \"Jornada gratuita de vacunación para niños de la comunidad\",\n    \"fechaHora\": \"2024-11-15T09:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Evento - Fecha Pasada (Error)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response indicates invalid date\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('INVALID_DATE');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Evento en el pasado\",\n    \"descripcion\": \"Este evento tiene fecha pasada\",\n    \"fechaHora\": \"2020-01-01T10:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Evento - Datos Inválidos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response has validation error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('error');",
+							"    pm.expect(jsonData.codigo).to.eql('VALIDATION_ERROR');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"AB\",\n    \"descripcion\": \"Muy corta\",\n    \"fechaHora\": \"fecha-invalida\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener Evento por ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has event data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('evento');",
+							"    pm.expect(jsonData.evento).to.have.property('id');",
+							"    pm.expect(jsonData.evento).to.have.property('nombre');",
+							"    pm.expect(jsonData.evento).to.have.property('descripcion');",
+							"    pm.expect(jsonData.evento).to.have.property('fechaHora');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar Evento",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has updated event\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('mensaje');",
+							"    pm.expect(jsonData).to.have.property('evento');",
+							"    pm.expect(jsonData.evento.nombre).to.include('Actualizado');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Entrega de alimentos en Villa 31 - Actualizado\",\n    \"descripcion\": \"Evento solidario actualizado para entregar alimentos y ropa a familias necesitadas\",\n    \"fechaHora\": \"2024-12-26T15:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Agregar Participante - Presidente",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms participant added\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('agregado exitosamente');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"usuarioId\": 2\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}/participantes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}",
+						"participantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voluntario se Auto-asigna",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Login as Voluntario first",
+							"pm.sendRequest({",
+							"    url: pm.environment.get('base_url') + '/api/auth/login',",
+							"    method: 'POST',",
+							"    header: {",
+							"        'Content-Type': 'application/json'",
+							"    },",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({",
+							"            identificador: 'voluntario@ong.com',",
+							"            clave: 'vol123'",
+							"        })",
+							"    }",
+							"}, function (err, response) {",
+							"    if (response.json().token) {",
+							"        pm.environment.set('voluntario_token', response.json().token);",
+							"        pm.environment.set('voluntario_id', response.json().usuario.id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms self-assignment\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('agregado exitosamente');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{voluntario_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"usuarioId\": {{voluntario_id}}\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}/participantes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}",
+						"participantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Voluntario intenta agregar otro usuario (Error)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"Response indicates self-assignment only\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('SELF_ASSIGNMENT_ONLY');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{voluntario_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"usuarioId\": 1\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}/participantes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}",
+						"participantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Quitar Participante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms participant removed\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('removido exitosamente');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}/participantes/2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}",
+						"participantes",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Evento",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response confirms deletion\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.mensaje).to.include('eliminado exitosamente');",
+							"    pm.expect(jsonData.codigo).to.eql('EVENT_DELETED');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{auth_token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/eventos/{{created_event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos",
+						"{{created_event_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acceso Denegado - Voluntario intenta crear evento",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"",
+							"pm.test(\"Response indicates insufficient permissions\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.codigo).to.eql('INSUFFICIENT_PERMISSIONS');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{voluntario_token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Intento de voluntario\",\n    \"descripcion\": \"Un voluntario no puede crear eventos\",\n    \"fechaHora\": \"2024-12-30T10:00:00Z\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/eventos",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"eventos"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}

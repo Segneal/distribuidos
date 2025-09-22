@@ -1,0 +1,10 @@
+{
+  "timestamp": "20250922_150149",
+  "backup_directory": "scripts\\sql-driven-testing\\backups\\backup_20250922_150149",
+  "backed_up_files": [
+    "Directory: api-gateway/postman",
+    "File: api-gateway/src/config/swagger.js",
+    "File: scripts/sql-driven-testing/kafka_scenarios.json"
+  ],
+  "total_files": 3
+}

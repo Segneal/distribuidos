@@ -1,0 +1,715 @@
+{
+	"info": {
+		"_postman_id": "network-collection-005",
+		"name": "05 - Red de ONGs",
+		"description": "Colección para testing de endpoints de red de ONGs (solicitudes, ofertas, transferencias, eventos externos)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Solicitudes de Donaciones",
+			"item": [
+				{
+					"name": "Crear Solicitud de Donaciones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has success flag\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData).to.have.property('idSolicitud');",
+									"    ",
+									"    // Store solicitud ID for subsequent tests",
+									"    pm.environment.set('solicitud_id', jsonData.idSolicitud);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donaciones\": [\n        {\n            \"categoria\": \"ALIMENTOS\",\n            \"descripcion\": \"Puré de tomates\"\n        },\n        {\n            \"categoria\": \"ROPA\",\n            \"descripcion\": \"Ropa de abrigo para niños\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/solicitudes-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"solicitudes-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Solicitudes Externas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has solicitudes array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    pm.expect(jsonData).to.have.property('total');",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/red/solicitudes-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"solicitudes-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dar de Baja Solicitud",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response confirms cancellation\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData.mensaje).to.include('baja');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/red/solicitudes-donaciones/{{solicitud_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"solicitudes-donaciones",
+								"{{solicitud_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ofertas de Donaciones",
+			"item": [
+				{
+					"name": "Crear Oferta de Donaciones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has success flag\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData).to.have.property('idOferta');",
+									"    ",
+									"    // Store oferta ID for subsequent tests",
+									"    pm.environment.set('oferta_id', jsonData.idOferta);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donaciones\": [\n        {\n            \"categoria\": \"JUGUETES\",\n            \"descripcion\": \"Pelotas de fútbol\",\n            \"cantidad\": 5\n        },\n        {\n            \"categoria\": \"UTILES_ESCOLARES\",\n            \"descripcion\": \"Cuadernos rayados\",\n            \"cantidad\": 20\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/ofertas-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"ofertas-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Ofertas Externas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has ofertas array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    pm.expect(jsonData).to.have.property('total');",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/red/ofertas-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"ofertas-donaciones"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transferencias de Donaciones",
+			"item": [
+				{
+					"name": "Transferir Donaciones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response confirms transfer\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData.mensaje).to.include('transferencia');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": \"SOL-2024-001\",\n    \"idOrganizacionSolicitante\": \"ong-hermanos-unidos\",\n    \"donaciones\": [\n        {\n            \"categoria\": \"ALIMENTOS\",\n            \"descripcion\": \"Puré de tomates\",\n            \"cantidad\": 10\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/transferencias-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"transferencias-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transferir - Stock Insuficiente (Error)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response indicates insufficient stock\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', false);",
+									"    pm.expect(jsonData.mensaje).to.include('Stock insuficiente');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": \"SOL-2024-002\",\n    \"idOrganizacionSolicitante\": \"ong-corazones-solidarios\",\n    \"donaciones\": [\n        {\n            \"categoria\": \"ALIMENTOS\",\n            \"descripcion\": \"Puré de tomates\",\n            \"cantidad\": 1000\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/transferencias-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"transferencias-donaciones"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Eventos Externos",
+			"item": [
+				{
+					"name": "Listar Eventos Externos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response has eventos array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData).to.have.property('data');",
+									"    pm.expect(jsonData).to.have.property('total');",
+									"    pm.expect(jsonData.data).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/red/eventos-externos?pagina=1&tamanoPagina=10&soloFuturos=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"eventos-externos"
+							],
+							"query": [
+								{
+									"key": "pagina",
+									"value": "1"
+								},
+								{
+									"key": "tamanoPagina",
+									"value": "10"
+								},
+								{
+									"key": "soloFuturos",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adhesión a Evento Externo - Voluntario",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Login as Voluntario first",
+									"pm.sendRequest({",
+									"    url: pm.environment.get('base_url') + '/api/auth/login',",
+									"    method: 'POST',",
+									"    header: {",
+									"        'Content-Type': 'application/json'",
+									"    },",
+									"    body: {",
+									"        mode: 'raw',",
+									"        raw: JSON.stringify({",
+									"            identificador: 'voluntario@ong.com',",
+									"            clave: 'vol123'",
+									"        })",
+									"    }",
+									"}, function (err, response) {",
+									"    if (response.json().token) {",
+									"        pm.environment.set('voluntario_token', response.json().token);",
+									"    }",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response confirms adhesion\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', true);",
+									"    pm.expect(jsonData.mensaje).to.include('adhesión');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{voluntario_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idEvento\": \"EV-2024-001\",\n    \"idOrganizador\": \"ong-corazones-solidarios\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/eventos-externos/adhesion",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"eventos-externos",
+								"adhesion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adhesión - Acceso Denegado (No Voluntario)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"pm.test(\"Response indicates insufficient permissions\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', false);",
+									"    pm.expect(jsonData.mensaje).to.include('voluntarios');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idEvento\": \"EV-2024-002\",\n    \"idOrganizador\": \"ong-hermanos-unidos\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/eventos-externos/adhesion",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"eventos-externos",
+								"adhesion"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Validaciones y Errores",
+			"item": [
+				{
+					"name": "Crear Solicitud - Datos Inválidos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response has validation errors\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', false);",
+									"    pm.expect(jsonData).to.have.property('errores');",
+									"    pm.expect(jsonData.errores).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donaciones\": [\n        {\n            \"categoria\": \"CATEGORIA_INVALIDA\",\n            \"descripcion\": \"\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/solicitudes-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"solicitudes-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Oferta - Sin Stock Suficiente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Response indicates insufficient stock\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('success', false);",
+									"    pm.expect(jsonData.mensaje).to.include('stock suficiente');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"donaciones\": [\n        {\n            \"categoria\": \"ALIMENTOS\",\n            \"descripcion\": \"Puré de tomates\",\n            \"cantidad\": 10000\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/red/ofertas-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"ofertas-donaciones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Acceso Sin Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Response indicates missing token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.mensaje).to.include('requerido');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/red/solicitudes-donaciones",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"red",
+								"solicitudes-donaciones"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000"
+		}
+	]
+}

@@ -1,0 +1,26 @@
+{
+  "solicitud_donaciones": [
+    {
+      "scenario_name": "Test Request",
+      "message": {}
+    }
+  ],
+  "oferta_donaciones": [
+    {
+      "scenario_name": "Test Offer",
+      "message": {}
+    }
+  ],
+  "eventos_solidarios": [
+    {
+      "scenario_name": "Test Event",
+      "message": {}
+    }
+  ],
+  "transferencia_donaciones": [
+    {
+      "scenario_name": "Test Transfer",
+      "message": {}
+    }
+  ]
+}
