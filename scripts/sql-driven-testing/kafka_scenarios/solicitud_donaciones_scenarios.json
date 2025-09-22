@@ -1,0 +1,126 @@
+{
+  "topic": "solicitud_donaciones",
+  "total_scenarios": 3,
+  "scenarios": [
+    {
+      "scenario_name": "Solicitud de Alimentos - Caso Exitoso",
+      "topic": "solicitud-donaciones",
+      "message_key": "ong-empuje-comunitario-req-9eea92de",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idSolicitud": "req-d8d99b55",
+        "donaciones": [
+          {
+            "categoria": "ALIMENTOS",
+            "descripcion": "Arroz y fideos para familias necesitadas"
+          },
+          {
+            "categoria": "ALIMENTOS",
+            "descripcion": "Leche en polvo para programa nutricional"
+          }
+        ],
+        "usuarioSolicitante": "test_vocal",
+        "contacto": {
+          "email": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "timestamp": "2025-09-22T11:34:42.822223"
+      },
+      "pre_conditions": [
+        "Usuario test_vocal debe tener rol VOCAL",
+        "Usuario debe estar autenticado",
+        "Sistema Kafka debe estar disponible"
+      ],
+      "post_conditions": [
+        "Mensaje publicado exitosamente en topic solicitud-donaciones",
+        "Otras ONGs pueden ver la solicitud",
+        "Solicitud registrada en tabla solicitudes_propias",
+        "Auditoría de solicitud creada"
+      ],
+      "test_assertions": [
+        "Mensaje enviado sin errores",
+        "Estructura JSON válida",
+        "Campos obligatorios presentes",
+        "ID de solicitud único generado"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Solicitud Múltiple Categorías",
+      "topic": "solicitud-donaciones",
+      "message_key": "ong-empuje-comunitario-req-75e94f02",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idSolicitud": "req-d0c2efb1",
+        "donaciones": [
+          {
+            "categoria": "ROPA",
+            "descripcion": "Ropa de invierno para adultos"
+          },
+          {
+            "categoria": "JUGUETES",
+            "descripcion": "Juguetes educativos para niños"
+          },
+          {
+            "categoria": "UTILES_ESCOLARES",
+            "descripcion": "Útiles para educación primaria"
+          }
+        ],
+        "usuarioSolicitante": "test_vocal",
+        "contacto": {
+          "email": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "timestamp": "2025-09-22T11:34:42.822234"
+      },
+      "pre_conditions": [
+        "Usuario test_vocal debe tener permisos de solicitud",
+        "Conexión a Kafka establecida"
+      ],
+      "post_conditions": [
+        "Solicitud multi-categoría registrada correctamente",
+        "Notificación enviada a red de ONGs"
+      ],
+      "test_assertions": [
+        "Todas las categorías incluidas en el mensaje",
+        "Formato de mensaje consistente",
+        "Timestamp válido"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Solicitud con Error de Validación",
+      "topic": "solicitud-donaciones",
+      "message_key": "ong-empuje-comunitario-req-invalid",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idSolicitud": "req-3e4a3123",
+        "donaciones": [
+          {
+            "categoria": "CATEGORIA_INVALIDA",
+            "descripcion": "Categoría no válida"
+          }
+        ],
+        "usuarioSolicitante": "test_vocal",
+        "timestamp": "2025-09-22T11:34:42.822238"
+      },
+      "pre_conditions": [
+        "Sistema debe validar estructura de mensajes"
+      ],
+      "post_conditions": [
+        "Mensaje rechazado por validación",
+        "Error registrado en logs"
+      ],
+      "test_assertions": [
+        "Error de validación detectado",
+        "Mensaje no procesado",
+        "Log de error generado"
+      ],
+      "expected_external_response": false,
+      "expected_error": "ValidationError",
+      "timeout_seconds": 10
+    }
+  ]
+}

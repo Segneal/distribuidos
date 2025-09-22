@@ -1,0 +1,52 @@
+{
+  "topic": "transferencia_donaciones",
+  "total_scenarios": 1,
+  "scenarios": [
+    {
+      "scenario_name": "Transferencia de Donaciones Exitosa",
+      "topic": "transferencia-donaciones/ong-corazon-solidario",
+      "message_key": "ong-empuje-comunitario-transfer-sol-001",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idSolicitud": "sol-001",
+        "donaciones": [
+          {
+            "id": 101,
+            "categoria": "ALIMENTOS",
+            "descripcion": "Arroz 1kg",
+            "cantidad": 10
+          }
+        ],
+        "usuarioTransferencia": "test_vocal",
+        "organizacionDestino": "ong-corazon-solidario",
+        "mensaje": "Transferencia en respuesta a solicitud sol-001",
+        "coordenadas": {
+          "contacto": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "timestamp": "2025-09-22T11:34:42.822421"
+      },
+      "pre_conditions": [
+        "Solicitud sol-001 debe estar activa",
+        "Donación 101 debe tener stock >= 10",
+        "Usuario test_vocal debe tener permisos de transferencia",
+        "Organización ong-corazon-solidario debe estar activa"
+      ],
+      "post_conditions": [
+        "Stock de donación 101 reducido en 10",
+        "Transferencia registrada en transferencias_enviadas",
+        "Mensaje enviado a topic específico de organización",
+        "Auditoría de transferencia creada",
+        "Notificación enviada a organización destino"
+      ],
+      "test_assertions": [
+        "Stock actualizado correctamente",
+        "Mensaje enviado al topic correcto",
+        "Datos de coordinación incluidos",
+        "Timestamp válido"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 45
+    }
+  ]
+}

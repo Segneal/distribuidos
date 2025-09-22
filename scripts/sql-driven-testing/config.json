@@ -1,0 +1,44 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 3308,
+    "user": "ong_user",
+    "password": "ong_password",
+    "database": "ong_sistema",
+    "charset": "utf8mb4"
+  },
+  "postman": {
+    "output_directory": "api-gateway/postman",
+    "environment_file": "api-gateway/postman/environment.json",
+    "preserve_custom_tests": true
+  },
+  "swagger": {
+    "config_file": "api-gateway/src/config/swagger.js",
+    "preserve_documentation": true,
+    "update_examples_only": true
+  },
+  "kafka": {
+    "output_directory": "scripts/sql-driven-testing/kafka_scenarios",
+    "topics_config": "kafka/topics.json",
+    "generate_producers": true,
+    "generate_consumers": true
+  },
+  "backup": {
+    "enabled": true,
+    "retention_days": 30,
+    "directory": "scripts/sql-driven-testing/backups",
+    "compress": true
+  },
+  "validation": {
+    "enabled": true,
+    "strict_mode": false,
+    "check_foreign_keys": true,
+    "min_test_cases": 10
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/sql-driven-testing.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "topic": "baja_solicitud_donaciones",
+  "total_scenarios": 1,
+  "scenarios": [
+    {
+      "scenario_name": "Cancelación de Solicitud Propia",
+      "topic": "baja-solicitud-donaciones",
+      "message_key": "ong-empuje-comunitario-cancel-req-001",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idSolicitud": "req-001",
+        "motivo": "Necesidad cubierta por otra fuente",
+        "usuarioCancelacion": "test_vocal",
+        "timestamp": "2025-09-22T11:34:42.822546"
+      },
+      "pre_conditions": [
+        "Solicitud req-001 debe estar activa",
+        "Usuario test_vocal debe tener permisos",
+        "Solicitud debe pertenecer a nuestra organización"
+      ],
+      "post_conditions": [
+        "Solicitud marcada como inactiva",
+        "Notificación enviada a red de ONGs",
+        "Auditoría de cancelación registrada"
+      ],
+      "test_assertions": [
+        "Estado de solicitud actualizado",
+        "Motivo de cancelación registrado",
+        "Timestamp de cancelación válido"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    }
+  ]
+}

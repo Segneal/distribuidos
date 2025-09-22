@@ -1,0 +1,77 @@
+{
+  "topic": "adhesion_evento",
+  "total_scenarios": 2,
+  "scenarios": [
+    {
+      "scenario_name": "Adhesión a Evento Externo - Voluntario",
+      "topic": "adhesion-evento/ong-corazon-solidario",
+      "message_key": "ong-empuje-comunitario-adhesion-ev-ext-001",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-ext-001",
+        "organizacionEvento": "ong-corazon-solidario",
+        "participante": {
+          "id": 4,
+          "nombreUsuario": "test_voluntario",
+          "nombre": "Ana",
+          "apellido": "Voluntario",
+          "email": "voluntario@test.com",
+          "telefono": "4444444444",
+          "rol": "VOLUNTARIO"
+        },
+        "mensaje": "Voluntario Ana Voluntario se adhiere al evento",
+        "timestamp": "2025-09-22T11:34:42.822789"
+      },
+      "pre_conditions": [
+        "Evento ev-ext-001 debe estar activo",
+        "Usuario test_voluntario debe tener rol VOLUNTARIO",
+        "Evento debe ser futuro",
+        "Organización ong-corazon-solidario debe estar activa"
+      ],
+      "post_conditions": [
+        "Adhesión registrada en adhesiones_eventos_externos",
+        "Notificación enviada a organización del evento",
+        "Participante agregado a lista del evento"
+      ],
+      "test_assertions": [
+        "Datos completos del participante incluidos",
+        "Mensaje enviado al topic correcto",
+        "Información de contacto presente"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Adhesión a Evento Externo - Error de Autorización",
+      "topic": "adhesion-evento/ong-corazon-solidario",
+      "message_key": "ong-empuje-comunitario-adhesion-error-ev-ext-001",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-ext-001",
+        "organizacionEvento": "ong-corazon-solidario",
+        "participante": {
+          "id": 2,
+          "nombreUsuario": "test_vocal",
+          "rol": "VOCAL"
+        },
+        "timestamp": "2025-09-22T11:34:42.822794"
+      },
+      "pre_conditions": [
+        "Usuario test_vocal tiene rol VOCAL",
+        "Solo VOLUNTARIOS pueden adherirse a eventos externos"
+      ],
+      "post_conditions": [
+        "Adhesión rechazada por falta de permisos",
+        "Error registrado en logs"
+      ],
+      "test_assertions": [
+        "Error de autorización detectado",
+        "Adhesión no procesada",
+        "Mensaje de error apropiado"
+      ],
+      "expected_external_response": false,
+      "expected_error": "AuthorizationError",
+      "timeout_seconds": 15
+    }
+  ]
+}

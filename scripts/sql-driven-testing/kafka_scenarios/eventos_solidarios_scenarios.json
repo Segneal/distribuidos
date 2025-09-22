@@ -1,0 +1,45 @@
+{
+  "topic": "eventos_solidarios",
+  "total_scenarios": 1,
+  "scenarios": [
+    {
+      "scenario_name": "Publicación de Evento Solidario",
+      "topic": "eventos-solidarios",
+      "message_key": "ong-empuje-comunitario-event-201",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-201",
+        "nombre": "Evento Test Futuro",
+        "descripcion": "Evento para testing",
+        "fechaHora": "2025-09-29T11:34:42.821902",
+        "ubicacion": "Sede Central - Calle Solidaridad 123",
+        "capacidadMaxima": 50,
+        "tipoParticipacion": "VOLUNTARIOS",
+        "requisitos": "Mayor de edad, disponibilidad de 4 horas",
+        "contacto": {
+          "responsable": "test_coordinador",
+          "email": "coordinador@test.com",
+          "telefono": "3333333333"
+        },
+        "timestamp": "2025-09-22T11:34:42.822626"
+      },
+      "pre_conditions": [
+        "Evento 201 debe ser futuro",
+        "Usuario test_coordinador debe tener rol COORDINADOR",
+        "Evento debe estar activo"
+      ],
+      "post_conditions": [
+        "Evento publicado en red inter-ONG",
+        "Otras ONGs pueden ver el evento",
+        "Voluntarios externos pueden adherirse"
+      ],
+      "test_assertions": [
+        "Fecha del evento es futura",
+        "Datos de contacto incluidos",
+        "Capacidad máxima especificada"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    }
+  ]
+}

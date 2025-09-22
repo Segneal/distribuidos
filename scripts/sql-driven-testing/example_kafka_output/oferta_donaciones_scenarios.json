@@ -1,0 +1,121 @@
+{
+  "topic": "oferta_donaciones",
+  "total_scenarios": 3,
+  "scenarios": [
+    {
+      "scenario_name": "Oferta de Alimentos - Stock Alto",
+      "topic": "oferta-donaciones",
+      "message_key": "ong-empuje-comunitario-off-494df2c6",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idOferta": "off-88551339",
+        "donaciones": [
+          {
+            "id": 101,
+            "categoria": "ALIMENTOS",
+            "descripcion": "Arroz 1kg - Stock Alto",
+            "cantidad": 20
+          }
+        ],
+        "usuarioOfertante": "test_vocal",
+        "contacto": {
+          "email": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "validoHasta": "2025-10-22T11:37:16.377624",
+        "timestamp": "2025-09-22T11:37:16.377629"
+      },
+      "pre_conditions": [
+        "Donación 101 debe tener stock >= 20",
+        "Usuario test_vocal debe tener permisos",
+        "Stock actual debe ser verificado"
+      ],
+      "post_conditions": [
+        "Oferta publicada en red inter-ONG",
+        "Stock reservado temporalmente",
+        "Oferta registrada en ofertas_propias"
+      ],
+      "test_assertions": [
+        "Cantidad ofrecida <= stock disponible",
+        "Fecha de validez futura",
+        "Datos de contacto incluidos"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Oferta de Ropa - Múltiples Items",
+      "topic": "oferta-donaciones",
+      "message_key": "ong-empuje-comunitario-off-5b33f8f6",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idOferta": "off-a1d5604e",
+        "donaciones": [
+          {
+            "id": 106,
+            "categoria": "ROPA",
+            "descripcion": "Camisetas M",
+            "cantidad": 15
+          }
+        ],
+        "usuarioOfertante": "test_vocal",
+        "contacto": {
+          "email": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "condiciones": "Retiro coordinado, ropa en buen estado",
+        "validoHasta": "2025-10-07T11:37:16.377638",
+        "timestamp": "2025-09-22T11:37:16.377639"
+      },
+      "pre_conditions": [
+        "Stock de donación 106 verificado",
+        "Usuario autorizado para ofertas"
+      ],
+      "post_conditions": [
+        "Oferta visible para otras ONGs",
+        "Condiciones especiales incluidas"
+      ],
+      "test_assertions": [
+        "Condiciones adicionales presentes",
+        "Validez temporal correcta"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Oferta con Stock Insuficiente - Error",
+      "topic": "oferta-donaciones",
+      "message_key": "ong-empuje-comunitario-off-error",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idOferta": "off-90b7d93c",
+        "donaciones": [
+          {
+            "id": 104,
+            "categoria": "ALIMENTOS",
+            "descripcion": "Cuadernos - Stock Cero",
+            "cantidad": 10
+          }
+        ],
+        "usuarioOfertante": "test_vocal",
+        "timestamp": "2025-09-22T11:37:16.377645"
+      },
+      "pre_conditions": [
+        "Donación 104 tiene stock = 0",
+        "Sistema debe validar stock antes de ofertar"
+      ],
+      "post_conditions": [
+        "Oferta rechazada por stock insuficiente",
+        "Error registrado en auditoría"
+      ],
+      "test_assertions": [
+        "Error de stock insuficiente detectado",
+        "Oferta no publicada",
+        "Mensaje de error apropiado"
+      ],
+      "expected_external_response": false,
+      "expected_error": "InsufficientStockError",
+      "timeout_seconds": 10
+    }
+  ]
+}

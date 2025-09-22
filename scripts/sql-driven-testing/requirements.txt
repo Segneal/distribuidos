@@ -1,0 +1,8 @@
+# Requirements for SQL-Driven Testing Data Extractor
+# Sistema ONG - Testing Configuration Generation
+
+# Database connectivity
+mysql-connector-python==8.2.0
+
+# Additional utilities (if needed for future enhancements)
+python-dotenv==1.0.0

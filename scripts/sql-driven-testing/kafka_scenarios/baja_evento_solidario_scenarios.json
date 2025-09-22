@@ -1,0 +1,38 @@
+{
+  "topic": "baja_evento_solidario",
+  "total_scenarios": 1,
+  "scenarios": [
+    {
+      "scenario_name": "Cancelación de Evento Solidario",
+      "topic": "baja-evento-solidario",
+      "message_key": "ong-empuje-comunitario-cancel-event-201",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-201",
+        "motivo": "Condiciones climáticas adversas",
+        "usuarioCancelacion": "test_coordinador",
+        "fechaCancelacion": "2025-09-22T11:34:42.822712",
+        "mensaje": "El evento ha sido cancelado por razones de seguridad. Se reprogramará próximamente.",
+        "timestamp": "2025-09-22T11:34:42.822714"
+      },
+      "pre_conditions": [
+        "Evento 201 debe estar activo",
+        "Usuario test_coordinador debe tener permisos",
+        "Evento debe ser futuro"
+      ],
+      "post_conditions": [
+        "Evento marcado como cancelado",
+        "Notificación enviada a red de ONGs",
+        "Participantes externos notificados",
+        "Auditoría de cancelación registrada"
+      ],
+      "test_assertions": [
+        "Motivo de cancelación incluido",
+        "Mensaje explicativo presente",
+        "Timestamp de cancelación válido"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    }
+  ]
+}

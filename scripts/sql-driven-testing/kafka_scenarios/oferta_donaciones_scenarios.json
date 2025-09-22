@@ -1,0 +1,82 @@
+{
+  "topic": "oferta_donaciones",
+  "total_scenarios": 2,
+  "scenarios": [
+    {
+      "scenario_name": "Oferta de Alimentos - Stock Alto",
+      "topic": "oferta-donaciones",
+      "message_key": "ong-empuje-comunitario-off-388bad7b",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idOferta": "off-a6c6cfa6",
+        "donaciones": [
+          {
+            "id": 101,
+            "categoria": "ALIMENTOS",
+            "descripcion": "Arroz 1kg",
+            "cantidad": 20
+          }
+        ],
+        "usuarioOfertante": "test_vocal",
+        "contacto": {
+          "email": "vocal@test.com",
+          "telefono": "2222222222"
+        },
+        "validoHasta": "2025-10-22T11:34:42.822334",
+        "timestamp": "2025-09-22T11:34:42.822339"
+      },
+      "pre_conditions": [
+        "Donación 101 debe tener stock >= 20",
+        "Usuario test_vocal debe tener permisos",
+        "Stock actual debe ser verificado"
+      ],
+      "post_conditions": [
+        "Oferta publicada en red inter-ONG",
+        "Stock reservado temporalmente",
+        "Oferta registrada en ofertas_propias"
+      ],
+      "test_assertions": [
+        "Cantidad ofrecida <= stock disponible",
+        "Fecha de validez futura",
+        "Datos de contacto incluidos"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Oferta con Stock Insuficiente - Error",
+      "topic": "oferta-donaciones",
+      "message_key": "ong-empuje-comunitario-off-error",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idOferta": "off-fce16136",
+        "donaciones": [
+          {
+            "id": 104,
+            "categoria": "ALIMENTOS",
+            "descripcion": "Cuadernos",
+            "cantidad": 10
+          }
+        ],
+        "usuarioOfertante": "test_vocal",
+        "timestamp": "2025-09-22T11:34:42.822348"
+      },
+      "pre_conditions": [
+        "Donación 104 tiene stock = 0",
+        "Sistema debe validar stock antes de ofertar"
+      ],
+      "post_conditions": [
+        "Oferta rechazada por stock insuficiente",
+        "Error registrado en auditoría"
+      ],
+      "test_assertions": [
+        "Error de stock insuficiente detectado",
+        "Oferta no publicada",
+        "Mensaje de error apropiado"
+      ],
+      "expected_external_response": false,
+      "expected_error": "InsufficientStockError",
+      "timeout_seconds": 10
+    }
+  ]
+}

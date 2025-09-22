@@ -1,0 +1,87 @@
+{
+  "topic": "eventos_solidarios",
+  "total_scenarios": 2,
+  "scenarios": [
+    {
+      "scenario_name": "Publicación de Evento Solidario",
+      "topic": "eventos-solidarios",
+      "message_key": "ong-empuje-comunitario-event-201",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-201",
+        "nombre": "Evento Test Futuro 1",
+        "descripcion": "Evento para testing de participación",
+        "fechaHora": "2025-09-29T11:37:16.376731",
+        "ubicacion": "Sede Central - Calle Solidaridad 123",
+        "capacidadMaxima": 50,
+        "tipoParticipacion": "VOLUNTARIOS",
+        "requisitos": "Mayor de edad, disponibilidad de 4 horas",
+        "contacto": {
+          "responsable": "test_coordinador",
+          "email": "coordinador@test.com",
+          "telefono": "3333333333"
+        },
+        "timestamp": "2025-09-22T11:37:16.377915"
+      },
+      "pre_conditions": [
+        "Evento 201 debe ser futuro",
+        "Usuario test_coordinador debe tener rol COORDINADOR",
+        "Evento debe estar activo"
+      ],
+      "post_conditions": [
+        "Evento publicado en red inter-ONG",
+        "Otras ONGs pueden ver el evento",
+        "Voluntarios externos pueden adherirse"
+      ],
+      "test_assertions": [
+        "Fecha del evento es futura",
+        "Datos de contacto incluidos",
+        "Capacidad máxima especificada"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    },
+    {
+      "scenario_name": "Evento con Requisitos Específicos",
+      "topic": "eventos-solidarios",
+      "message_key": "ong-empuje-comunitario-special-event-202",
+      "message": {
+        "idOrganizacion": "ong-empuje-comunitario",
+        "idEvento": "ev-special-202",
+        "nombre": "Evento Test Futuro 2",
+        "descripcion": "Evento para testing de adhesión externa",
+        "fechaHora": "2025-10-06T11:37:16.376749",
+        "ubicacion": "Centro Comunitario - Av. Esperanza 456",
+        "capacidadMaxima": 30,
+        "tipoParticipacion": "COORDINADORES_Y_VOLUNTARIOS",
+        "requisitos": "Experiencia previa en eventos solidarios, certificado de antecedentes",
+        "materialesNecesarios": [
+          "Identificación",
+          "Ropa cómoda",
+          "Botiquín personal"
+        ],
+        "contacto": {
+          "responsable": "test_coordinador",
+          "email": "coordinador@test.com",
+          "telefono": "3333333333"
+        },
+        "timestamp": "2025-09-22T11:37:16.377919"
+      },
+      "pre_conditions": [
+        "Evento con requisitos especiales definidos",
+        "Capacidad limitada configurada"
+      ],
+      "post_conditions": [
+        "Evento con requisitos publicado",
+        "Filtros de participación aplicados"
+      ],
+      "test_assertions": [
+        "Requisitos específicos incluidos",
+        "Materiales necesarios listados",
+        "Tipo de participación especificado"
+      ],
+      "expected_external_response": true,
+      "timeout_seconds": 30
+    }
+  ]
+}
